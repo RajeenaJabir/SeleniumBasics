@@ -102,7 +102,6 @@ public class SeleniumCommands {
         registerMenu.click();
         selectGender("Female");
     }
-
     public void selectGender(String gender) {
         List<WebElement> genderSelect = driver.findElements(By.xpath("//input[@id='gender-male' or @id='gender-female']"));
         for (int i = 0; i < genderSelect.size(); i++) {
@@ -131,12 +130,10 @@ public class SeleniumCommands {
     @Test(priority = 5)
     public void verifyCommunityPoll() {
         driver.get("http://demowebshop.tricentis.com/");
-        WebElement registerMenu = driver.findElement(By.className("ico-register"));
-        registerMenu.click();
         selectCommunityPoll("Poor");
     }
     public void selectCommunityPoll(String pollText) {
-        List<WebElement> pollSelect = driver.findElements(By.xpath("//input[@name='pollanswers-1' or  type='radio']"));
+        List<WebElement> pollSelect = driver.findElements(By.xpath("//input[@name='pollanswers-1' or  type='radio']//following-sibling::label"));
         for (int j = 0; j < pollSelect.size(); j++) {
             if (pollSelect.get(j).getText().equals(pollText)) {
                 pollSelect.get(j).click();
