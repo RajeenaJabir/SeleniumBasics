@@ -6,10 +6,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.jnlp.ClipboardService;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ObsquraSeleniumCommands {
@@ -114,8 +118,8 @@ public class ObsquraSeleniumCommands {
         WebElement showMsg = driver.findElement(By.xpath("//div[@id='message-one' and @class='my-2']"));
         String msg = showMsg.getText();
         System.out.println(msg);
-
     }
+
     public void selectGender(String gender) {
         List<WebElement> genderSelection = driver.findElements(By.xpath("//input[@class='form-check-input' and @name='inlineRadioOptions']//following-sibling::label"));
         for (int i = 0; i < genderSelection.size(); i++) {
@@ -125,40 +129,68 @@ public class ObsquraSeleniumCommands {
             }
         }
     }
+
     @Test(priority = 6)
-        public void verifyGroupRadioBtn()
-        {
-            driver.get("https://selenium.obsqurazone.com/radio-button-demo.php");
-            selectGender2("Male");
-            WebElement showSelectedValueBtn= driver.findElement(By.xpath("//button[@class='btn btn-primary' and @id='button-one']"));
-            showSelectedValueBtn.click();
-            WebElement radioMsg= driver.findElement(By.xpath("//div[@id='message-one' and @class='my-2']"));
-            System.out.println(radioMsg.getText());
-            patientsAgeGroup("19 t0 44");
-            WebElement getResultBtn= driver.findElement(By.xpath("//button[@class='btn btn-primary' and @id='button-two']"));
-            getResultBtn.click();
-            WebElement patientMsg= driver.findElement(By.xpath("//div[@id='message-two' and @class='my-2']"));
-            String pMsg=patientMsg.getText();
-            System.out.println(pMsg);
-        }
-        public void selectGender2(String gender2) {
-            List<WebElement> genderSelection2 = driver.findElements(By.xpath("//input[@class='form-check-input' and @name='student-gender']//following-sibling::label"));
-            for (int i = 0; i < genderSelection2.size(); i++) {
-                if (genderSelection2.get(i).getText().equals(gender2)) {
-                    genderSelection2.get(i).click();
-                    break;
-                }
+    public void verifyGroupRadioBtn() {
+        driver.get("https://selenium.obsqurazone.com/radio-button-demo.php");
+        selectGender2("Male");
+        WebElement showSelectedValueBtn = driver.findElement(By.xpath("//button[@class='btn btn-primary' and @id='button-one']"));
+        showSelectedValueBtn.click();
+        WebElement radioMsg = driver.findElement(By.xpath("//div[@id='message-one' and @class='my-2']"));
+        System.out.println(radioMsg.getText());
+        patientsAgeGroup("19 t0 44");
+        WebElement getResultBtn = driver.findElement(By.xpath("//button[@class='btn btn-primary' and @id='button-two']"));
+        getResultBtn.click();
+        WebElement patientMsg = driver.findElement(By.xpath("//div[@id='message-two' and @class='my-2']"));
+        String pMsg = patientMsg.getText();
+        System.out.println(pMsg);
+    }
+
+    public void selectGender2(String gender2) {
+        List<WebElement> genderSelection2 = driver.findElements(By.xpath("//input[@class='form-check-input' and @name='student-gender']//following-sibling::label"));
+        for (int i = 0; i < genderSelection2.size(); i++) {
+            if (genderSelection2.get(i).getText().equals(gender2)) {
+                genderSelection2.get(i).click();
+                break;
             }
         }
-        public void patientsAgeGroup(String age){
-        List<WebElement> patientsAge=driver.findElements(By.xpath("//input[@class='form-check-input' and @name='student-age']//following-sibling::label"));
-        for (int j=0;j<patientsAge.size();j++){
-            if(patientsAge.get(j).getText().equals(age)){
+    }
+
+    public void patientsAgeGroup(String age) {
+        List<WebElement> patientsAge = driver.findElements(By.xpath("//input[@class='form-check-input' and @name='student-age']//following-sibling::label"));
+        for (int j = 0; j < patientsAge.size(); j++) {
+            if (patientsAge.get(j).getText().equals(age)) {
                 patientsAge.get(j).click();
             }
         }
 
+    }
+
+    @Test(priority = 7)
+    public void verifyDropDown() {
+        driver.get("https://demo.guru99.com/selenium/newtours/register.php");
+        WebElement dropDownElmnt = driver.findElement(By.xpath("//select[@name='country' and @size='1']"));
+        Select dropDownSelect = new Select(dropDownElmnt);
+
+        //expected dropdown
+        List<String> expDropDwn = new ArrayList<>();
+        expDropDwn.add("ALBANIA");
+        expDropDwn.add("ALGERIA");
+        expDropDwn.add("AMERICAN SAMOA");
+
+         List<WebElement> dropDownSelectOptions = dropDownSelect.getOptions();
+        List<String> actDropDown = new ArrayList<>();
+              for (int i = 0; i < dropDownSelectOptions.size(); i++) {
+            actDropDown.add(dropDownSelectOptions.get(i).getText());
         }
+        for(int a=0;a<expDropDwn.size();a++){
+            for (int b=0;b<actDropDown.size();b++){
+                if(a==b){
+                    Assert.assertEquals(actDropDown.get(a),expDropDwn.get(b),"ERROR::Invalid value");
+                    System.out.println(expDropDwn);
+                    System.out.println(actDropDown);
+                }
+            }
+        }
+    }
 }
-
-
